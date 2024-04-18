@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
+import { Link } from "react-router-dom";
 
 const MyRole = () => {
   const [user] = useAuthState(auth);
@@ -46,6 +47,7 @@ const MyRole = () => {
           </li>
         ))}
       </ul>
+      <Link to="/vendor"><button className="btn btn-outline btn-secondary">Apply For Product</button></Link>
     </div>
   );
 };
