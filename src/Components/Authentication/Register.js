@@ -194,7 +194,7 @@ const onSubmit = async (data) => {
 
               {signInError}
               <input
-                className="btn w-full max-w-xs text-white"
+                className="btn w-full max-w-xs bg-orange-600 text-white"
                 type="submit"
                 value="Sign Up"
               />

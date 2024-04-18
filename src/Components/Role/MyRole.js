@@ -11,12 +11,15 @@ const MyRole = () => {
       if (user && user.email) {
         try {
           const response = await fetch(
-            `http://localhost:7000/role/user/${user.email}`
+            `http://localhost:7000/user/${user.email}`
           );
           if (response.ok) {
             const data = await response.json();
-            console.log(data)
-            setRoles(data);
+            if (Array.isArray(data)) {
+              setRoles(data);
+            } else {
+              console.error("Data received is not an array:", data);
+            }
           } else {
             console.error("Failed to fetch roles:", response.statusText);
           }
@@ -25,23 +28,24 @@ const MyRole = () => {
         }
       }
     };
-
+  
     fetchRoles();
   }, [user]);
-
+  
   console.log(user?.email);
   const email = user?.email;
   const userRoles = roles.filter((role) => role.email === email);
+  
   return (
     <div>
       <h1>My Roles: {userRoles.length}</h1>
       <ul>
-      {userRoles.map((role, index) => (
-        <li key={index}>
-          Role: {role.role}, Status: {role.status}
-        </li>
-      ))}
-    </ul>
+        {userRoles.map((role, index) => (
+          <li key={index}>
+            Role: {role.role}, Status: {role.status}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
