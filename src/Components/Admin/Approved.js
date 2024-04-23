@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Approved = () => {
   const [roles, setRoles] = useState([]);
@@ -285,7 +286,7 @@ const Approved = () => {
         ))}
       </ul>
       
-      
+      <Link to="/adminAll"><button className="btn btn-xs sm:btn-sm md:btn-md lg:btn-lg">All Product</button></Link>
     </div>
   );
 };

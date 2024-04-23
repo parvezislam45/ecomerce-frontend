@@ -7,7 +7,6 @@ const MyOrder = () => {
   const [user] = useAuthState(auth);
   console.log(user);
   const [orders, setOrders] = useState([]);
-  console.log(orders);
 
   useEffect(() => {
     if (user && user.email) {

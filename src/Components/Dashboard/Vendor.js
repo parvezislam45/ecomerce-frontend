@@ -1,41 +1,74 @@
 import React, { useState } from "react";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
+import auth from "../../firebase.init";
+import { useNavigate } from "react-router-dom";
 
 const Vendor = () => {
-  const { register, handleSubmit, reset } = useForm();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [pendingProducts,setPendingProducts] = useState()
+  const [submitting, setSubmitting] = useState(false);
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
-    setIsSubmitting(true);
-    try {
-      const response = await fetch('http://localhost:7000/product', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [image3, setImage3] = useState(null);
+  const [image4, setImage4] = useState(null);
+
+  const handleImage1Change = (event) => {
+    setImage1(event.target.files[0]);
+  };
+
+  const handleImage2Change = (event) => {
+    setImage2(event.target.files[0]);
+  };
+  const handleImage3Change = (event) => {
+    setImage3(event.target.files[0]);
+  };
+  const handleImage4Change = (event) => {
+    setImage4(event.target.files[0]);
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setSubmitting(true);
+
+    const formData = new FormData();
+    formData.append("userName", event.target.userName.value);
+    formData.append("name", event.target.name.value);
+    formData.append("email", user ? user.email || "" : "");
+    formData.append("description", event.target.description.value);
+    formData.append("category", event.target.category.value);
+    formData.append("price", event.target.price.value);
+    formData.append("images", image1);
+    formData.append("images", image2);
+    formData.append("images", image3);
+    formData.append("images", image4);
+
+    formData.append("status", "pending");
+
+    fetch("http://localhost:7000/product", {
+      method: "POST",
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        setSubmitting(false);
+        navigate("/myRole");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        setSubmitting(false);
       });
-      if (response.status === 201) {
-        const newProduct = await response.json();
-        alert('Product submitted successfully and pending approval.');
-        // Add the newly created product to the pending products list
-        setPendingProducts([...pendingProducts, newProduct]);
-        reset(); // Reset form fields
-      } else {
-        alert('Failed to submit product.');
-      }
-    } catch (error) {
-      console.error('Error submitting product:', error);
-      alert('An error occurred. Please try again later.');
-    }
-    setIsSubmitting(false);
   };
   return (
     <div>
       <div class="min-h-screen flex justify-center items-center">
         <div class="lg:w-2/5 md:w-1/2 w-2/3">
-          <form onSubmit={handleSubmit(onSubmit)} class="bg-white p-10 rounded-lg shadow-lg min-w-full">
+          <form
+            onSubmit={onSubmit}
+            class="bg-white p-10 rounded-lg shadow-lg min-w-full"
+          >
             <h1 class="text-center h-10 w-full bg-orange-600 text-lg text-white font-bold font-sans">
               প্রোডাক্ট আবেদন ফর্ম
             </h1>
@@ -49,9 +82,20 @@ const Vendor = () => {
               <input
                 class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
                 type="text"
-                name="username"
-                {...register("name")}
+                name="userName"
                 placeholder="আপনার নাম লিখুন"
+              />
+            </div>
+            <div>
+              <label className="text-gray-800 font-semibold block my-3 text-md">
+                Email
+              </label>
+              <input
+                className="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
+                type="email"
+                name="email"
+                value={user ? user.email || "" : ""}
+                readOnly
               />
             </div>
             <div>
@@ -64,8 +108,8 @@ const Vendor = () => {
               <input
                 class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
                 type="text"
-                name="username"
-                id="username"
+                name="name"
+                id="name"
                 placeholder="আপনার নাম লিখুন"
               />
             </div>
@@ -77,11 +121,11 @@ const Vendor = () => {
                 Description
               </label>
               <textarea
-              class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
-          id="description"
-          {...register('description')}
-          placeholder="বিবরণ"
-        ></textarea>
+                class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
+                placeholder="বিবরণ"
+                type="text"
+                name="description"
+              ></textarea>
             </div>
             <div>
               <label
@@ -93,14 +137,11 @@ const Vendor = () => {
               <input
                 class="w-full bg-gray-100 px-4 py-2 rounded-lg focus:outline-none"
                 type="text"
-                name="Price"
-                {...register('price')}
+                name="price"
                 placeholder="Price"
               />
             </div>
-            <select 
-            className="select w-full max-w-xs"
-            {...register('category')}>
+            <select name="category" className="select w-full max-w-xs">
               <option disabled selected>
                 প্রোডাক্ট ক্যাটাগরি সিলেক্ট করুন
               </option>
@@ -133,6 +174,7 @@ const Vendor = () => {
                 class="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
                 id="default_size"
                 type="file"
+                onChange={handleImage1Change}
               />
             </div>
             <div>
@@ -146,6 +188,7 @@ const Vendor = () => {
                 class="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
                 id="default_size"
                 type="file"
+                onChange={handleImage2Change}
               />
             </div>
             <div>
@@ -159,6 +202,7 @@ const Vendor = () => {
                 class="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
                 id="default_size"
                 type="file"
+                onChange={handleImage3Change}
               />
             </div>
             <div>
@@ -172,13 +216,17 @@ const Vendor = () => {
                 class="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
                 id="default_size"
                 type="file"
+                onChange={handleImage4Change}
               />
             </div>
 
-            <button type="submit"
-              class="w-full mt-6 bg-orange-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans" disabled={isSubmitting}>
-          {isSubmitting ? 'Submitting...' : 'আবেদন করুন'}
-        </button>
+            <button
+              type="submit"
+              class="w-full mt-6 bg-orange-600 rounded-lg px-4 py-2 text-lg text-white tracking-wide font-semibold font-sans"
+              disabled={submitting}
+            >
+              {submitting ? "Submitting..." : "আবেদন করুন"}
+            </button>
           </form>
         </div>
       </div>

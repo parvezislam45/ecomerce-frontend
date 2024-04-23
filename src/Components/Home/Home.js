@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import NewProduct from "../Product/NewProduct";
 import useProduct from "../../Hook/useProduct";
 import NewHome from "./Details/NewHome";
@@ -12,14 +12,36 @@ import TradingDEtails from "./Details/TradingDEtails";
 import PopularDetails from "./Details/PopularDetails";
 import FlashDEtails from "./Details/FlashDEtails";
 import AllDetails from "./Details/AllDetails";
+import axios from "axios";
 
 const Home = () => {
   const [products] = useProduct();
-  const accessories = products.filter((item) => item.category == "");
+  const [items, setItems] = useState([]);
+  const navigate = useNavigate();
+
+  const fetchProductsByDiscount = async (discountPercentage) => {
+    try {
+      const response = await axios.get(`http://localhost:7000/product?discountPercentage=${discountPercentage}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      return [];
+    }
+  };
+  const handleButtonClick = async (discountPercentage) => {
+    try {
+      const filteredProducts = await fetchProductsByDiscount(discountPercentage);
+      setItems(filteredProducts);
+      // Navigate to discount component
+      navigate('/discount', { state: { products: filteredProducts } });
+    } catch (error) {
+      console.error('Error handling button click:', error);
+    }
+  };
   return (
     <div>
       <img
-        className="w-4/5 mx-10"
+        className="w-full mx-10"
         src="https://www.self-shopping.com/static/media/self-platfrom.2182d0b69eecc52ed1c7.png"
         alt=""
       />
@@ -36,6 +58,7 @@ const Home = () => {
             <h2 className="font-semibold text-sm  mx-auto">আমার অর্ডার</h2>
           </div>
         </div>
+        <button disabled>
         <div className="card w-28 h-44">
           <figure>
             <img
@@ -48,6 +71,8 @@ const Home = () => {
             <h2 className="font-semibold text-sm  mx-auto">আমার ড্যাশবোর্ড</h2>
           </div>
         </div>
+        </button>
+        
         <div className="card w-28 h-44">
           <figure>
             <img
@@ -209,6 +234,12 @@ const Home = () => {
             <h1 className="text-2xl font-bold">5%</h1>
           </div>
         </div>
+        <Link to="/discount" onClick={() => handleButtonClick(20)}>20% Discount</Link>
+      <Link to="/discount" onClick={() => handleButtonClick(10)}>10% Discount</Link>
+      <Link to="/discount" onClick={() => handleButtonClick(5)}>5% Discount</Link>
+      {items.map(item => (
+        <div key={item.id}>{item.name}</div>
+      ))}
       </div>
 
       <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
@@ -482,7 +513,7 @@ const Home = () => {
             <FavDetails key={product._id} product={product} />
           ))}
       </div>
-      <div className="flex justify-between items-center mt-5 px-5">
+      {/* <div className="flex justify-between items-center mt-5 px-5">
         <div className="h-14 w-44 bg-yellow-500 rounded-r-full">
           <h1 className="text-black font-normal text-xl mt-3 px-3">
             এক্সক্লুসিভ প্রোডাক্ট
@@ -492,16 +523,16 @@ const Home = () => {
         <Link to='/exclusive'><a className="text-xl font-bold text-red-500" href="">
         সকল প্রোডাক্ট 
         </a></Link>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2 mt-14 px-5">
+      </div> */}
+      {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2 mt-14 px-5">
         {products
           .filter((product) => product.type === "exclusiveProduct")
           .slice(0, 7)
           .map((product) => (
             <ExclusiveDetails key={product._id} product={product} />
           ))}
-      </div>
-      <div className="flex justify-between items-center mt-5 px-5">
+      </div> */}
+      {/* <div className="flex justify-between items-center mt-5 px-5">
         <div className="h-14 w-44 bg-yellow-500 rounded-r-full">
           <h1 className="text-black font-normal text-2xl mt-3 px-3">
             সর্বাধিক বিক্রিত
@@ -521,8 +552,8 @@ const Home = () => {
               <MostDetails key={product._id} product={product} />
             ))}
        
-      </div>
-      <div className="flex justify-between items-center mt-5 px-5">
+      </div> */}
+      {/* <div className="flex justify-between items-center mt-5 px-5">
         <div className="h-14 w-44 bg-yellow-500 rounded-r-full">
           <h1 className="text-black font-normal text-2xl mt-3 px-3">
             ট্রেন্ডিং প্রোডাক্ট
@@ -540,8 +571,8 @@ const Home = () => {
           .map((product) => (
             <TradingDEtails key={product._id} product={product} />
           ))}
-      </div>
-      <div className="flex justify-between items-center mt-5 px-5">
+      </div> */}
+      {/* <div className="flex justify-between items-center mt-5 px-5">
         <div className="h-14 w-44 bg-yellow-500 rounded-r-full">
           <h1 className="text-black font-normal text-2xl mt-3 px-3">
             জনপ্রিয় পণ্য
@@ -559,7 +590,7 @@ const Home = () => {
           .map((product) => (
             <PopularDetails key={product._id} product={product} />
           ))}
-      </div>
+      </div> */}
       <div className="flex justify-center items-center mt-5 px-5 bg-red-500 h-16">
         <h1 className="text-xl font-bold text-white">
           আপনার প্রয়োজনীয় আরো পণ্য

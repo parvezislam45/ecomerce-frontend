@@ -33,6 +33,11 @@ import Category from "./Components/Product/Category";
 import AllProduct from "./Components/Product/AllProduct";
 import Roles from "./Components/Role/Roles";
 import AllRoles from "./Components/Role/AllRoles";
+import Update from "./Components/Role/Update";
+import MyProduct from "./Components/Role/MyProduct";
+import Discount from "./Components/Product/Discount";
+import AllAdminProduct from "./Components/Admin/AllAdminProduct";
+import AdminUpdate from "./Components/Admin/AdminUpdate";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -195,11 +200,16 @@ function App() {
               <Route path="/details/:id" element={<AllDetails />} />
               <Route path="/more/:id" element={<MoreDetails />} />
               <Route path="/approved" element={<Approved />} />
+              <Route path="/adminAll" element={<AllAdminProduct />} />
+              <Route path="/adminUpdate/:id" element={<AdminUpdate />} />
               <Route path="/myOrder" element={<MyOrder />} />
               <Route path="/myRole" element={<MyRole />} />
+              <Route path="/update/:id" element={<Update />} />
               <Route path="/order/:id" element={<Order />} />
               <Route path="/role" element={<Role />} />
+              <Route path="/discount" element={<Discount />} />
               <Route path="/roles" element={<Roles/>} />
+              <Route path="/myProduct" element={<MyProduct/>} />
               <Route path="/allrole" element={<AllRoles/>} />
               <Route path="/category/:name" element={<Category />} />
             </Routes>
