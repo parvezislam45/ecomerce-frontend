@@ -21,7 +21,7 @@ const Home = () => {
 
   const fetchProductsByDiscount = async (discountPercentage) => {
     try {
-      const response = await axios.get(`http://localhost:7000/product?discountPercentage=${discountPercentage}`);
+      const response = await axios.get(`http://localhost:7000/discount?discountPercentage=${discountPercentage}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching products:', error);

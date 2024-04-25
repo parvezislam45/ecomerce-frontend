@@ -20,11 +20,11 @@ const AllDetails = () => {
       <div className="grid max-w-screen-lg gap-8 row-gap-5 md:row-gap-8 sm:mx-auto lg:grid-cols-2">
         <div className="transition duration-300 transform bg-white rounded shadow-sm hover:-translate-y-1 hover:shadow md:text-center">
           <div className="relative">
-            <img
-              className="object-cover w-72 h-72"
-              src={service.img}
-              alt=""
-            />
+          <img
+                className="object-cover w-72 h-72"
+                src={service.images && service.images[0]}
+                alt=""
+              />
           </div>
         </div>
         <div className="transition duration-300 transform bg-white rounded shadow-sm hover:-translate-y-1 hover:shadow md:text-center">
@@ -53,7 +53,7 @@ const AllDetails = () => {
             </div>
             <div className="flex justify-between px-3 mt-5">
             <h1 className="text-2xl font-bold text-red-500 ">{service.name}</h1>
-            <Link to={`/more/${id}`}><button type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-orange-500 border border-gray-200 hover:text-white dark:bg-orange-600 dark:text-white">Alternative</button></Link>
+            <Link to={`/more/${id}`}><button type="button" class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-orange-500 border border-gray-200 hover:text-white dark:bg-orange-600 dark:text-white">Buy Now</button></Link>
             
             </div>
             <h1 className="text-md text-start px-3">Product Code : xjhd35466</h1>
