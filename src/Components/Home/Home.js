@@ -46,6 +46,7 @@ const Home = () => {
         alt=""
       />
       <div className="container mt-28 grid grid-cols-3 md:grid-cols-6 px-5">
+        <Link to="/myOrder">
         <div className="card w-28 h-44">
           <figure>
             <img
@@ -58,8 +59,10 @@ const Home = () => {
             <h2 className="font-semibold text-sm  mx-auto">আমার অর্ডার</h2>
           </div>
         </div>
-        <button disabled>
-        <div className="card w-28 h-44">
+        </Link>
+        
+      <Link to="/myRole">
+      <div className="card w-28 h-44">
           <figure>
             <img
               className="w-16 h-16 rounded-full"
@@ -71,7 +74,8 @@ const Home = () => {
             <h2 className="font-semibold text-sm  mx-auto">আমার ড্যাশবোর্ড</h2>
           </div>
         </div>
-        </button>
+      </Link>
+        
         
         <div className="card w-28 h-44">
           <figure>
