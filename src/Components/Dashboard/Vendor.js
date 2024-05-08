@@ -3,6 +3,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import auth from "../../firebase.init";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const Vendor = () => {
   const { register, handleSubmit } = useForm();
@@ -34,8 +35,8 @@ const Vendor = () => {
 
       const result = await response.json();
       console.log(result);
-      alert("Products Added SuccessFully")
-      navigate('/all');
+      toast("Product Submitted Wait For Admin Approval")
+      navigate('/myRole');
       event.target.reset();
     } catch (error) {
       console.error('Error:', error);
