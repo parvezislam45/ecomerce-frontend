@@ -1,44 +1,39 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuthState, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from "react-hook-form";
 import auth from "../../firebase.init";
 import Loading from "../Loading/Loading";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const Login = () => {
-    const navigate = useNavigate()
-    const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
-    const {
-      register,
-      formState: { errors },
-      handleSubmit,
-    } = useForm();
-    const [signInWithEmailAndPassword, user, loading, error] =
-      useSignInWithEmailAndPassword(auth);
-  
-    let signInError;
-  
-  
-    if (loading || gLoading) {
-      return <Loading></Loading>;
-    }
-    if (error || gError) {
-      signInError = (
-        <p className="text-red-500">
-          <small>{error?.message || gError?.message}</small>
-        </p>
-      );
-    }
-    if (user || gUser) {
-      navigate("/");
-    }
-  
-    const onSubmit = (data) => {
-      signInWithEmailAndPassword(data.email, data.password);
-    };
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { search } = location;
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [infoMsg, setInfoMsg] = useState('');
+  const [initialLoading, setInitialLoading] = useState(false);
+  const [initialError, setInitialError] = useState('');
+  const handleLogin = (e) => {
+    e.preventDefault();
+    setLoginLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setLoginLoading(false);
+        setLoginError('');
+      })
+      .catch((err) => {
+        setLoginLoading(false);
+        setLoginError(err.message);
+      });
+  };
   return (
     <div>
-      <div class="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
+      {/* <div class="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-4xl">
         <div
           class="hidden bg-cover lg:block lg:w-1/2"
           style={{
@@ -205,12 +200,54 @@ const Login = () => {
           </button>
           <p class="text-center text-sm text-white mt-2">
             Don't have an account?{" "}
-            <Link className="text-sky-400 underline" to="/reg">
+            <Link className="text-sky-400 underline" to="/register">
               Sign Up Now
             </Link>
           </p>
         </div>
-      </div>
+      </div> */}
+      {initialLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          {initialError !== '' ? (
+            <div className='error-msg'>{initialError}</div>
+          ) : (
+            <>
+              {user ? (
+                <div>Please wait...</div>
+              ) : (
+                <form className='form-group custom-form' onSubmit={handleLogin}>
+                  <label>Email</label>
+                  <input
+                    type='email'
+                    required
+                    placeholder='Enter Email'
+                    className='form-control'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <label>Password</label>
+                  <input
+                    type='password'
+                    required
+                    placeholder='Enter Password'
+                    className='form-control'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button type='submit' className='btn btn-success btn-md'>
+                    {loginLoading ? <span>Logging you in</span> : <span>Login</span>}
+                  </button>
+                  {loginError !== '' && <div className='error-msg'>{loginError}</div>}
+                  {infoMsg !== '' && <div className='info-msg'>{infoMsg}</div>}
+                </form>
+              )}
+            </>
+          )}
+        </>
+      )}
+      <Link to="/register">SignUp</Link>
     </div>
   );
 };

@@ -25,7 +25,7 @@ const Nav = () => {
 
   useEffect(() => {
     if (user && user.email) {
-      fetch(`http://localhost:7000/order/user/${user.email}`)
+      fetch(`http://localhost:7000/cart/user/${user.email}`)
         .then((res) => res.json())
         .then((data) => setOrders(data));
     }
@@ -152,13 +152,6 @@ const Nav = () => {
                 </button>
               </div>
             </form>
-            {user && !isAdmin && !isVendor && (
-              <Link to="/roles">
-                <li>
-                  <a>Apply For Role</a>
-                </li>
-              </Link>
-            )}
           </ul>
         </div>
         <div className="navbar-end">
@@ -252,10 +245,10 @@ const Nav = () => {
                       </li>
                     </Link>
                   ) : (
-                    <Link to="/user">
+                    <Link to="/own">
                       <li>
                         {" "}
-                        <a className="btn btn-ghost text-xl">User Dashboard</a>
+                        <a className="btn btn-ghost text-md">My Order</a>
                       </li>
                     </Link>
                   )}

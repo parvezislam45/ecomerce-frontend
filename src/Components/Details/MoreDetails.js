@@ -62,9 +62,9 @@ const MoreDetails = () => {
       email: user?.email || "",
     };
 
-    const favoriteUrl = "http://localhost:7000/order";
+    const cartUrl = "http://localhost:7000/cart";
     try {
-      const response = await fetch(favoriteUrl, {
+      const response = await fetch(cartUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,10 +73,10 @@ const MoreDetails = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add to favorites");
+       toast("Failed Added to Cart")
       }
       setCart(true);
-      toast("Product Added To Cart");
+      toast("Product Added To Cart Successfully");
       navigate("/myOrder", { replace: true });
       console.log("Navigating to Cart page...");
     } catch (error) {
@@ -132,29 +132,6 @@ const MoreDetails = () => {
             </div>
             <div className="transition duration-300 transform bg-white rounded shadow-sm hover:-translate-y-1 hover:shadow md:text-center">
               <div className="relative">
-                <div className="flex">
-                  <button
-                    type="button"
-                    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-orange-600 rounded-md border hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-orange-600 dark:text-white dark:hover:text-white dark:hover:bg-orange-600"
-                  >
-                    Alternative
-                  </button>
-                  <button
-                    type="button"
-                    class="text-white w-full bg-orange-600 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex justify-center items-center dark:focus:ring-gray-600 dark:bg-orange-600 dark:text-white dark:hover:bg-orange-800 me-2 mb-2"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="currentColor"
-                      class="bi bi-bag w-6 h-6 me-2 -ms-1"
-                      viewBox="0 0 16 16"
-                    >
-                      {" "}
-                      <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />{" "}
-                    </svg>
-                    Connect with Opera Wallet
-                  </button>
-                </div>
                 <div>
                   <h1 className="text-2xl text-start font-bold">
                     {service.name}
@@ -272,20 +249,6 @@ const MoreDetails = () => {
                     </svg>
                     Add to Cart
                   </button>
-                  {/* <button
-                    onClick={handleAddToCart}
-                      type="button"
-                      class="py-2.5 w-full me-2 mb-2 text-sm font-medium text-white focus:outline-none bg-orange-600 rounded-md border hover:bg-gray-100 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:bg-orange-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-700"
-                    >
-                    Add to Cart
-                    </button> */}
-
-                  {/* <button
-                    onClick={handleAddToFavorites}
-                    className="mt-3 h-9 px-3 bg-green-500 hover:bg-green-600 active:bg-green-700 focus:bg-green-600 transition duration-500 rounded-md text-white"
-                  >
-                    Add to Favorite
-                  </button> */}
                   <button
                   onClick={handleAddToFavorites}
                     type="button"

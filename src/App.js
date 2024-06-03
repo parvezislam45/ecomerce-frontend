@@ -42,6 +42,9 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import CountDown from "./Components/Favorite/CountDown";
 import Reg from "./Components/Authentication/Reg";
+import Checkout from "./Components/Checkout/Checkout";
+import OwnOrders from "./Components/Order/OwnOrders";
+import Verify from "./Components/Authentication/Verify";
 
 function App() {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -192,7 +195,7 @@ function App() {
               <Route path="/contract" element={<Contract />} />
               <Route path="/login" element={<Login setLoggedInUser={setLoggedInUser} />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/reg" element={<Reg />} />
+              <Route path="/verify-email" element={<Verify/>}/>
               <Route path="/admin" element={<Admin />} />
               <Route path="/vendor" element={<Vendor />} />
               <Route path="/user" element={<User />} />
@@ -221,6 +224,8 @@ function App() {
               <Route path="/myProduct" element={<MyProduct/>} />
               <Route path="/category/:name" element={<Category />} />
               <Route path="/count" element={<CountDown/>} />
+              <Route path="/checkout" element={<Checkout/>} />
+              <Route path="/own" element={<OwnOrders/>} />
             </Routes>
           </main>
         </div>
